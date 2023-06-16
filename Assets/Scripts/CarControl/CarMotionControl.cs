@@ -35,12 +35,9 @@ namespace Scripts.CarMotion
 
         private void Drive(Vector2 direction)
         {
-            
-            transform.position += _config.Speed * Time.deltaTime * 
-                (_dirftAffectionVelocity + transform.forward.normalized * (1-_currentDriftForce)).normalized;
-            Debug.Log(_dirftAffectionVelocity);
-            _dirftAffectionVelocity = _initialDirection.normalized * _currentDriftForce * transform.right.normalized.x;
+            transform.position += _config.Speed * Time.deltaTime * (_dirftAffectionVelocity + transform.forward.normalized * (1 - _currentDriftForce)).normalized;
 
+            _dirftAffectionVelocity = _initialDirection.normalized * _currentDriftForce * transform.right.normalized.x;
             transform.Rotate(Vector3.up, _config.RotationSpeed * direction.x * Time.deltaTime);
         }
 
