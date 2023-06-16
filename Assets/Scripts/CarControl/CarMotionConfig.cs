@@ -1,10 +1,8 @@
 using NaughtyAttributes;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Scripts.CarMotion 
+namespace Scripts.CarMotion
 {
     [Serializable]
     [CreateAssetMenu(menuName = "Config/CarMotion", fileName = "CarMotionConfig")]

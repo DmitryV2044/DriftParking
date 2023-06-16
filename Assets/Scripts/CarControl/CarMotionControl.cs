@@ -1,8 +1,6 @@
 using DG.Tweening;
 using NaughtyAttributes;
 using Scripts.InputHandling;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
