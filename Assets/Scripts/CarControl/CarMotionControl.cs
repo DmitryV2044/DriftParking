@@ -51,7 +51,6 @@ namespace Scripts.CarMotion
             _initialDirection = transform.forward.normalized;
             _driftForceTween.Kill();
             _inputHandler.OnTick += HandleTurn;
-            _currentDriftForce = _config.DriftEffectForce;
         }
 
         private void HandleTurn(Vector2 direction)
@@ -60,7 +59,7 @@ namespace Scripts.CarMotion
             if (_rotationDelta > _config.DriftActivationAngle || _isDrifting)
             {
                 _isDrifting = true;
-                //_dirftAffectionVelocity = (_initialDirection.normalized * _driftEffectForce).normalized;
+                _currentDriftForce = _config.DriftEffectForce;
 
             }
         }

@@ -16,6 +16,6 @@ MonoBehaviour:
   RotationSpeed: 70
   _autoCalculateRotaionSpeed: 1
   _autoCalculationCoeficient: 1.75
-  DriftEffectForce: 0.5
+  DriftEffectForce: 0.4
   DriftEffectDecrementTime: 2
   DriftActivationAngle: 20
