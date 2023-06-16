@@ -18,4 +18,4 @@ MonoBehaviour:
   _autoCalculationCoeficient: 1.75
   DriftEffectForce: 0.5
   DriftEffectDecrementTime: 2
-  DriftActivationAngle: 10
+  DriftActivationAngle: 20

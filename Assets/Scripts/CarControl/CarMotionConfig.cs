@@ -10,9 +10,9 @@ namespace Scripts.CarMotion
     [CreateAssetMenu(menuName = "Config/CarMotion", fileName = "CarMotionConfig")]
     public class CarMotionConfig : ScriptableObject
     {
-        [BoxGroup("Speed"), Header("")] public float Speed;
+        [Min(0), BoxGroup("Speed")] public float Speed;
 
-        [BoxGroup("Rotation"), DisableIf("_autoCalculateRotaionSpeed")] public float RotationSpeed;
+        [BoxGroup("Rotation"), DisableIf("_autoCalculateRotaionSpeed"), Min(0)] public float RotationSpeed;
         [SerializeField, BoxGroup("Rotation")] private bool _autoCalculateRotaionSpeed;
         [SerializeField, BoxGroup("Rotation"), ShowIf("_autoCalculateRotaionSpeed")] private float _autoCalculationCoeficient;
 

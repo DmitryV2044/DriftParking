@@ -12,7 +12,6 @@ namespace Scripts.CarMotion
     public class CarMotionControl : MonoBehaviour
     {
         [SerializeField, Expandable] CarMotionConfig _config;
-        [SerializeField, BoxGroup("Speed")] private float _speed;
 
         [SerializeField, ReadOnly, BoxGroup("Info")] private float _rotationDelta;
         [SerializeField, ReadOnly, BoxGroup("Info")] private Vector3 _dirftAffectionVelocity;
@@ -39,7 +38,7 @@ namespace Scripts.CarMotion
         private void Drive(Vector2 direction)
         {
             
-            transform.position += _speed * Time.deltaTime * 
+            transform.position += _config.Speed * Time.deltaTime * 
                 (_dirftAffectionVelocity + transform.forward.normalized * (1-_currentDriftForce)).normalized;
             Debug.Log(_dirftAffectionVelocity);
             _dirftAffectionVelocity = _initialDirection.normalized * _currentDriftForce * transform.right.normalized.x;
