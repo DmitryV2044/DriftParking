@@ -8,23 +8,17 @@ namespace Scripts.CarMotion
     [CreateAssetMenu(menuName = "Config/CarMotion", fileName = "CarMotionConfig")]
     public class CarMotionConfig : ScriptableObject
     {
-        [Min(0), BoxGroup("Speed")] public float Speed;
+        [Min(0), BoxGroup("Movement")] public float Speed;
 
-        [BoxGroup("Rotation"), DisableIf("_autoCalculateRotaionSpeed"), Min(0)] public float RotationSpeed;
-        [SerializeField, BoxGroup("Rotation")] private bool _autoCalculateRotaionSpeed;
-        [SerializeField, BoxGroup("Rotation"), ShowIf("_autoCalculateRotaionSpeed")] private float _autoCalculationCoeficient;
+        [BoxGroup("Movement"), Range(0, 5)] public float RotationSpeed;
+        [BoxGroup("Movement"), Range(0, 20)] public float DefaultTraction;
 
-        [Range(0, 1), BoxGroup("Drifting")] public float DriftEffectForce;
-        [Range(0, 5), BoxGroup("Drifting")] public float DriftEffectDecrementTime;
-        [Range(0, 180), BoxGroup("Drifting")] public float DriftActivationAngle;
+        [BoxGroup("Drifting"), Range(0,5)] public float StateChangingSmoothness;
+        [BoxGroup("Drifting"), Range(0, 2)] public float Drag;
+        [BoxGroup("Drifting"), Range(0, 20), Tooltip("Traction when handbraking")] public float DriftingTraction;
+        [BoxGroup("Drifting"), ReadOnly, Header("Not implemented")] public bool ActivateDriftAtAngle;
+        [BoxGroup("Drifting"), Range(0, 90), ShowIf("ActivateDriftAtAngle")] public float DriftActivationAngle;
 
-        private void OnValidate()
-        {
-            if (_autoCalculateRotaionSpeed)
-            {
-                RotationSpeed = Speed * _autoCalculationCoeficient;
-            }
-        }
     }
 
 }

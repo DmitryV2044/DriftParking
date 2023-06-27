@@ -7,31 +7,43 @@ namespace Scripts.InputHandling
 {
     public class InputHandler : ITickable, IInitializable, IDisposable
     {
+        public Vector2 Input { get; private set; }
+        public bool IsHandbraking { get; private set; }
+
         public event Action<Vector2> OnTick;
         public event Action OnTurnBegan;
         public event Action OnTurnEnded;
+        public event Action<bool> HandbrakeStateChanged;
 
         private PlayerControls _controls;
-        private Vector2 _input;
 
         public InputHandler() { }
 
         public void Initialize()
         {
             _controls = new PlayerControls();
-            _input = Vector2.zero;
+            Input = Vector2.zero;
             _controls.Enable();
             _controls.Driving.Rotation.performed += StartTurn;
             _controls.Driving.Rotation.canceled += EndTurn;
+            _controls.Driving.HandBrake.performed += HandleHandbrake;
+            _controls.Driving.HandBrake.canceled += HandleHandbrake;
         }
 
         public void Tick()
         {
-            _input = Vector2.right * _controls.Driving.Rotation.ReadValue<float>()
+            Input = Vector2.right * _controls.Driving.Rotation.ReadValue<float>()
                 + Vector2.up * _controls.Driving.Speed.ReadValue<float>();
 
-            _input.Normalize();
-            OnTick?.Invoke(_input);
+            Debug.Log(IsHandbraking);
+            Input.Normalize();
+            OnTick?.Invoke(Input);
+        }
+
+        private void HandleHandbrake(CallbackContext context)
+        {
+            IsHandbraking = context.ReadValue<float>() > 0;
+            HandbrakeStateChanged?.Invoke(IsHandbraking);
         }
 
         private void StartTurn(CallbackContext context) 
@@ -50,6 +62,9 @@ namespace Scripts.InputHandling
         {
             _controls.Driving.Rotation.performed -= StartTurn;
             _controls.Driving.Rotation.canceled -= EndTurn;
+            _controls.Driving.HandBrake.performed -= HandleHandbrake;
+            _controls.Driving.HandBrake.canceled -= HandleHandbrake;
+
 
             _controls.Disable();
             _controls.Dispose();

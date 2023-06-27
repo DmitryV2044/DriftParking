@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: CarMotionConfig
   m_EditorClassIdentifier: 
   Speed: 40
-  RotationSpeed: 70
-  _autoCalculateRotaionSpeed: 1
-  _autoCalculationCoeficient: 1.75
-  DriftEffectForce: 0.4
-  DriftEffectDecrementTime: 2
+  RotationSpeed: 2
+  DefaultTraction: 10
+  StateChangingSmoothness: 5
+  Drag: 1
+  DriftingTraction: 0.71
+  ActivateDriftAtAngle: 0
   DriftActivationAngle: 20

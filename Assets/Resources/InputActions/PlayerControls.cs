@@ -44,6 +44,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""HandBrake"",
+                    ""type"": ""Value"",
+                    ""id"": ""f46fd314-4524-4520-9a13-7b6b702a361b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Rotation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d5a220d-761f-40d4-bc7a-90fb89fadd01"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HandBrake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -133,6 +153,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Driving = asset.FindActionMap("Driving", throwIfNotFound: true);
         m_Driving_Speed = m_Driving.FindAction("Speed", throwIfNotFound: true);
         m_Driving_Rotation = m_Driving.FindAction("Rotation", throwIfNotFound: true);
+        m_Driving_HandBrake = m_Driving.FindAction("HandBrake", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -194,12 +215,14 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private IDrivingActions m_DrivingActionsCallbackInterface;
     private readonly InputAction m_Driving_Speed;
     private readonly InputAction m_Driving_Rotation;
+    private readonly InputAction m_Driving_HandBrake;
     public struct DrivingActions
     {
         private @PlayerControls m_Wrapper;
         public DrivingActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Speed => m_Wrapper.m_Driving_Speed;
         public InputAction @Rotation => m_Wrapper.m_Driving_Rotation;
+        public InputAction @HandBrake => m_Wrapper.m_Driving_HandBrake;
         public InputActionMap Get() { return m_Wrapper.m_Driving; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -215,6 +238,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Rotation.started -= m_Wrapper.m_DrivingActionsCallbackInterface.OnRotation;
                 @Rotation.performed -= m_Wrapper.m_DrivingActionsCallbackInterface.OnRotation;
                 @Rotation.canceled -= m_Wrapper.m_DrivingActionsCallbackInterface.OnRotation;
+                @HandBrake.started -= m_Wrapper.m_DrivingActionsCallbackInterface.OnHandBrake;
+                @HandBrake.performed -= m_Wrapper.m_DrivingActionsCallbackInterface.OnHandBrake;
+                @HandBrake.canceled -= m_Wrapper.m_DrivingActionsCallbackInterface.OnHandBrake;
             }
             m_Wrapper.m_DrivingActionsCallbackInterface = instance;
             if (instance != null)
@@ -225,6 +251,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Rotation.started += instance.OnRotation;
                 @Rotation.performed += instance.OnRotation;
                 @Rotation.canceled += instance.OnRotation;
+                @HandBrake.started += instance.OnHandBrake;
+                @HandBrake.performed += instance.OnHandBrake;
+                @HandBrake.canceled += instance.OnHandBrake;
             }
         }
     }
@@ -251,5 +280,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         void OnSpeed(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
+        void OnHandBrake(InputAction.CallbackContext context);
     }
 }

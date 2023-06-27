@@ -41,9 +41,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1703899433605916350}
-  - component: {fileID: 231838351004471298}
+  - component: {fileID: 2357629668007717026}
   m_Layer: 0
-  m_Name: InputInstaller
+  m_Name: CoreInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ Transform:
   m_Father: {fileID: 8562307740227226068}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &231838351004471298
+--- !u!114 &2357629668007717026
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3259044406475643218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a9acdbc724ce1c4e9a5e9efe25c7f0f, type: 3}
+  m_Script: {fileID: 11500000, guid: c570e259a9dcf8f40ac9e604770e006c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4165791842156718238
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
   _monoInstallers:
-  - {fileID: 231838351004471298}
+  - {fileID: 2357629668007717026}
   _installerPrefabs: []
   _parentNewObjectsUnderContext: 1
   _editorReflectionBakingCoverageMode: 0

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem.OnScreen;
 
 namespace Scripts.InputHandling
 {
-    public class RotationControl : OnScreenControl, IPointerDownHandler, IPointerUpHandler
+    public class MovementControl : OnScreenControl, IPointerDownHandler, IPointerUpHandler
     {
 
         [SerializeField, InputControl(layout = "Button")] private string _controlPath;

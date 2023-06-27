@@ -503,8 +503,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: 4b251f2ff46d27f4e8cb051293620694, type: 2}
-  _rotationDelta: 0
-  _dirftAffectionVelocity: {x: 0, y: 0, z: 0}
-  _initialDirection: {x: 0, y: 0, z: 0}
-  _currentDriftForce: 0
-  _isDrifting: 0
+  _moveForce: {x: 0, y: 0, z: 0}

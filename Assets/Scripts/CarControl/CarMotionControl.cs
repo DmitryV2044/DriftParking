@@ -1,9 +1,7 @@
-using DG.Tweening;
 using NaughtyAttributes;
 using Scripts.InputHandling;
 using UnityEngine;
 using Zenject;
-
 
 namespace Scripts.CarMotion
 {
@@ -11,68 +9,80 @@ namespace Scripts.CarMotion
     {
         [SerializeField, Expandable] CarMotionConfig _config;
 
-        [SerializeField, ReadOnly, BoxGroup("Info")] private float _rotationDelta;
-        [SerializeField, ReadOnly, BoxGroup("Info")] private Vector3 _dirftAffectionVelocity;
-        [SerializeField, ReadOnly, BoxGroup("Info")] private Vector3 _initialDirection;
-        [SerializeField, ReadOnly, BoxGroup("Info")] private float _currentDriftForce;
-        [SerializeField, ReadOnly, BoxGroup("Info")] private bool _isDrifting = false;
-
         private InputHandler _inputHandler;
-        private Tween _driftForceTween;
+        [SerializeField, ReadOnly, BoxGroup("Info")]private Vector3 _moveForce;
+        [SerializeField, ReadOnly, BoxGroup("Info")] private bool _isHandbraking;
+        [SerializeField, ReadOnly, BoxGroup("Info")] private float _currentTraction;
+
 
         [Inject]
         private void Construct(InputHandler inputHandler)
         {
             _inputHandler = inputHandler;
+            _currentTraction = _config.DefaultTraction;
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
-            _inputHandler.OnTick += Drive;
-            _inputHandler.OnTurnBegan += Turn;
-            _inputHandler.OnTurnEnded += EndTurn;
+            _inputHandler.HandbrakeStateChanged += SetHandbrake;
+            //_inputHandler.OnTurnBegan += HandleTurn;
+            //_inputHandler.OnTurnEnded += EndTurn;
+        }
+
+        private void Update()
+        {
+            Drive(_inputHandler.Input);
         }
 
         private void Drive(Vector2 direction)
         {
-            transform.position += _config.Speed * Time.deltaTime * (_dirftAffectionVelocity + transform.forward.normalized * (1 - _currentDriftForce)).normalized;
 
-            _dirftAffectionVelocity = _initialDirection.normalized * _currentDriftForce * transform.right.normalized.x;
-            transform.Rotate(Vector3.up, _config.RotationSpeed * direction.x * Time.deltaTime);
+            _moveForce += _config.Speed * Time.deltaTime * transform.forward;
+            transform.position += _moveForce * Time.deltaTime;
+
+            float steerInput = direction.x;
+            transform.Rotate(_config.RotationSpeed * _moveForce.magnitude * steerInput * Time.deltaTime * Vector3.up);
+
+            _moveForce *= _config.Drag;
+            _moveForce = Vector3.ClampMagnitude(_moveForce, _config.Speed);
+
+            _moveForce = Vector3.Lerp(_moveForce.normalized, transform.forward, _currentTraction * Time.deltaTime) * _moveForce.magnitude;
+
+            if (_isHandbraking)
+                _currentTraction = Mathf.Lerp(_currentTraction, _config.DriftingTraction, Time.deltaTime * _config.StateChangingSmoothness);
+
+            else
+                _currentTraction = Mathf.Lerp(_currentTraction, _config.DefaultTraction, Time.deltaTime * _config.StateChangingSmoothness);
         }
 
-        private void Turn()
+        private void SetHandbrake(bool state)
         {
-            _initialDirection = transform.forward.normalized;
-            _driftForceTween.Kill();
-            _inputHandler.OnTick += HandleTurn;
-        }
+            _isHandbraking = state;
 
-        private void HandleTurn(Vector2 direction)
-        {
-            _rotationDelta = Vector3.Angle(_initialDirection, transform.forward);
-            if (_rotationDelta > _config.DriftActivationAngle || _isDrifting)
-            {
-                _isDrifting = true;
-                _currentDriftForce = _config.DriftEffectForce;
-
-            }
         }
+        //private void HandleTurn()
+        //{
+        //    _initialDirection = transform.forward.normalized;
+        //    _driftForceTween.Kill();
+        //    _inputHandler.OnTick += CalculateRotationDelta;
+        //}
 
-        private void EndTurn()
-        {
-            _inputHandler.OnTick -= HandleTurn;
-            _rotationDelta = 0;
-            _isDrifting = false;
-            _driftForceTween = DOTween.To(() => _currentDriftForce, (float x) => _currentDriftForce = x, 0, _config.DriftEffectDecrementTime);
-            _dirftAffectionVelocity = Vector2.zero;
-        }
+        //private void CalculateRotationDelta(Vector2 direction)
+        //{
+        //    _rotationDelta = Vector3.Angle(_initialDirection, transform.forward);
+        //    if (_rotationDelta > _config.DriftActivationAngle || _isDrifting)
+        //    {
+        //        _isDrifting = true;
+        //        _currentDriftForce = _config.DriftEffectForce;
+
+        //    }
+        //}
 
         private void OnDisable()
         {
-            _inputHandler.OnTurnBegan -= Turn;
-            _inputHandler.OnTurnEnded -= EndTurn;
-            _inputHandler.OnTick -= Drive;
+            _inputHandler.HandbrakeStateChanged -= SetHandbrake;
+
+            //_inputHandler.OnTurnBegan -= HandleTurn;
         }
 
     }
