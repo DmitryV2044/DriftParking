@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using Scripts.Effects;
 using Scripts.InputHandling;
 using UnityEngine;
 using Zenject;
@@ -13,20 +14,24 @@ namespace Scripts.CarMotion
         [SerializeField, ReadOnly, BoxGroup("Info")]private Vector3 _moveForce;
         [SerializeField, ReadOnly, BoxGroup("Info")] private bool _isHandbraking;
         [SerializeField, ReadOnly, BoxGroup("Info")] private float _currentTraction;
+        [SerializeField, ReadOnly, BoxGroup("Info")] private float _speed;
 
+
+        private TireTrailController _tireTrail;
 
         [Inject]
-        private void Construct(InputHandler inputHandler)
+        private void Construct(InputHandler inputHandler, TireTrailController tireTrail)
         {
             _inputHandler = inputHandler;
             _currentTraction = _config.DefaultTraction;
+            _tireTrail = tireTrail;
+            _speed = _config.Speed;
         }
 
         private void OnEnable()
         {
-            _inputHandler.HandbrakeStateChanged += SetHandbrake;
-            //_inputHandler.OnTurnBegan += HandleTurn;
-            //_inputHandler.OnTurnEnded += EndTurn;
+            _inputHandler.HandbrakeStarted += SetHandbrake;
+            _inputHandler.HandbrakeFinished += ReleaseHandbrake;
         }
 
         private void Update()
@@ -37,52 +42,46 @@ namespace Scripts.CarMotion
         private void Drive(Vector2 direction)
         {
 
-            _moveForce += _config.Speed * Time.deltaTime * transform.forward;
+            _moveForce += _speed * Time.deltaTime * transform.forward;
             transform.position += _moveForce * Time.deltaTime;
 
             float steerInput = direction.x;
             transform.Rotate(_config.RotationSpeed * _moveForce.magnitude * steerInput * Time.deltaTime * Vector3.up);
 
             _moveForce *= _config.Drag;
-            _moveForce = Vector3.ClampMagnitude(_moveForce, _config.Speed);
+            _moveForce = Vector3.ClampMagnitude(_moveForce, _speed);
 
             _moveForce = Vector3.Lerp(_moveForce.normalized, transform.forward, _currentTraction * Time.deltaTime) * _moveForce.magnitude;
 
-            if (_isHandbraking)
+            if (_inputHandler.IsHandbraking)
                 _currentTraction = Mathf.Lerp(_currentTraction, _config.DriftingTraction, Time.deltaTime * _config.StateChangingSmoothness);
 
             else
                 _currentTraction = Mathf.Lerp(_currentTraction, _config.DefaultTraction, Time.deltaTime * _config.StateChangingSmoothness);
         }
 
-        private void SetHandbrake(bool state)
+        private void SetHandbrake()
         {
-            _isHandbraking = state;
+            _isHandbraking = true;
+            _tireTrail.EnableTrail();
+            if (_config.AffectSpeedOnHandbreaking)
+                _speed = _config.SpeedOnHandbraking;
+        }
+
+        private void ReleaseHandbrake()
+        {
+            _isHandbraking = false;
+            _speed = _config.Speed;
+            _tireTrail.DisableTrail();
 
         }
-        //private void HandleTurn()
-        //{
-        //    _initialDirection = transform.forward.normalized;
-        //    _driftForceTween.Kill();
-        //    _inputHandler.OnTick += CalculateRotationDelta;
-        //}
-
-        //private void CalculateRotationDelta(Vector2 direction)
-        //{
-        //    _rotationDelta = Vector3.Angle(_initialDirection, transform.forward);
-        //    if (_rotationDelta > _config.DriftActivationAngle || _isDrifting)
-        //    {
-        //        _isDrifting = true;
-        //        _currentDriftForce = _config.DriftEffectForce;
-
-        //    }
-        //}
 
         private void OnDisable()
         {
-            _inputHandler.HandbrakeStateChanged -= SetHandbrake;
+            _inputHandler.HandbrakeStarted -= SetHandbrake;
+            _inputHandler.HandbrakeFinished -= ReleaseHandbrake;
 
-            //_inputHandler.OnTurnBegan -= HandleTurn;
+
         }
 
     }

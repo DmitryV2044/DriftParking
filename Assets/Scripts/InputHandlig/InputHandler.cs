@@ -13,7 +13,8 @@ namespace Scripts.InputHandling
         public event Action<Vector2> OnTick;
         public event Action OnTurnBegan;
         public event Action OnTurnEnded;
-        public event Action<bool> HandbrakeStateChanged;
+        public event Action HandbrakeStarted;
+        public event Action HandbrakeFinished;
 
         private PlayerControls _controls;
 
@@ -43,7 +44,10 @@ namespace Scripts.InputHandling
         private void HandleHandbrake(CallbackContext context)
         {
             IsHandbraking = context.ReadValue<float>() > 0;
-            HandbrakeStateChanged?.Invoke(IsHandbraking);
+            if(IsHandbraking)
+                HandbrakeStarted?.Invoke();
+            else
+                HandbrakeFinished?.Invoke();
         }
 
         private void StartTurn(CallbackContext context) 
