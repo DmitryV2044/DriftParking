@@ -63,7 +63,7 @@ MonoBehaviour:
   - {fileID: 6800460987843624310, guid: 636a6535fc3cc4f23b4556ec0cd1607d, type: 3}
   brushRadius: 0
   density: 1
-  rotationStep: 90
+  rotationStep: 15
   paintCanvasSize: 500
   preventCanvasBelow0: 1
   snapToGrid: 1

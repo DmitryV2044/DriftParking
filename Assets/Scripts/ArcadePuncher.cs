@@ -7,7 +7,7 @@ public class ArcadePuncher : MonoBehaviour, IRestartable
 
     private void Awake() => _rigidbody = GetComponent<Rigidbody>();
 
-    public void Punch(Collision collision, float force) => _rigidbody.AddForce(collision.contacts[0].normal * _forceModifier * force, ForceMode.Impulse);
+    public void Punch(Collision collision, float force) => _rigidbody.AddForce(-collision.contacts[0].normal * _forceModifier * force, ForceMode.Impulse);
 
     public void Restart()
     {
