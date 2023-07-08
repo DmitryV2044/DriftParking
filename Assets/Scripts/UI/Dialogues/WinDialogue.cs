@@ -19,7 +19,11 @@ namespace Scripts.UI.Dialogues
 
         private void OnEnable() => _restartButton.onClick.AddListener(HandleRestart);
 
-        private void HandleRestart() => _eventBus.Dispatch(GameEventType.Restarted);
+        private void HandleRestart()
+        {
+            _eventBus.Dispatch(GameEventType.Restarted);
+            _interactor.ShowDialogue<StartDialogue>();
+        }
 
         private void OnDisable() => _restartButton.onClick.RemoveAllListeners();
     }

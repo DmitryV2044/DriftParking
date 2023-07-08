@@ -5,9 +5,9 @@ using Zenject;
 
 namespace Scripts.UI.Dialogues
 {
-    public class LoseDialogue : Dialogue
+    public class StartDialogue : Dialogue
     {
-        [SerializeField] private Button _restartButton;
+        [SerializeField] private Button _startButton;
 
         private EventBus _eventBus;
 
@@ -19,20 +19,18 @@ namespace Scripts.UI.Dialogues
 
         private void OnEnable()
         {
-            _restartButton.onClick.AddListener(HandleRestart);
+            _startButton.onClick.AddListener(HandleStart);
         }
 
-        private void HandleRestart()
+        private void HandleStart()
         {
-            _eventBus.Dispatch(GameEventType.Restarted);
-            _interactor.ShowDialogue<StartDialogue>();
+            _eventBus.Dispatch(GameEventType.Started);
+            _interactor.HideDialogue();
         }
 
         private void OnDisable()
         {
-            _restartButton.onClick.AddListener(HandleRestart);
+            _startButton.onClick.AddListener(HandleStart);
         }
-
     }
 }
-

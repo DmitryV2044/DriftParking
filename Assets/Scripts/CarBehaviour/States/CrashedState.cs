@@ -17,7 +17,6 @@ namespace Scripts.CarBehaviour
 
         public override void Enter()
         {
-            Debug.Log("Crashed");
             _interactor.ShowDialogue<LoseDialogue>();
         }
     }

@@ -34,11 +34,11 @@ namespace Scripts.CarBehaviour
         private void OnEnable()
         {
             _collisionDetector.OnCollided += Collide;
-            _eventBus.Subscribe(GameEventType.Restarted, ChangeState<DrivingState>);
+            _eventBus.Subscribe(GameEventType.Started, ChangeState<DrivingState>);
+            _eventBus.Subscribe(GameEventType.Restarted, ChangeState<IdleState>);
         }
 
-        private void Start() => ChangeState<DrivingState>();
-
+        private void Start() => ChangeState<IdleState>();
 
         private void Collide(Collision collision)
         {
@@ -58,7 +58,9 @@ namespace Scripts.CarBehaviour
         private void OnDisable()
         {
             _collisionDetector.OnCollided -= Collide;
-            _eventBus.UnSubscribe(GameEventType.Restarted, ChangeState<DrivingState>);
+            _eventBus.UnSubscribe(GameEventType.Restarted, ChangeState<IdleState>);
+            _eventBus.UnSubscribe(GameEventType.Started, ChangeState<DrivingState>);
+
         }
 
     }

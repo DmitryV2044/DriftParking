@@ -8,7 +8,7 @@ namespace Scripts.General.StateMachine
         protected List<State> _states;
         protected State _currentState;
 
-        protected void Update() => _currentState?.Update();
+        protected void FixedUpdate() => _currentState?.Update();
 
         public void ChangeState<S>() where S : State
         {

@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Scripts.CarMotion
 {
-    public class CarMotionController : MonoBehaviour
+    public class CarMotionController : MonoBehaviour, IRestartable
     {
         [SerializeField, Expandable] CarMotionConfig _config;
 
@@ -85,10 +85,17 @@ namespace Scripts.CarMotion
         {
             _inputHandler.HandbrakeStarted -= SetHandbrake;
             _inputHandler.HandbrakeFinished -= ReleaseHandbrake;
-
-
         }
 
+        public void Restart()
+        {
+            _speed = _config.Speed;
+            _rotationSpeed = _config.RotationSpeed;
+            _moveForce = Vector3.zero;
+            _currentTraction = _config.DefaultTraction;
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+        }
     }
 
 }

@@ -1,20 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using Scripts.General;
+using Scripts.UI.Dialogues;
 using UnityEngine;
+using Zenject;
 
 namespace Scripts.UI
 {
     public class UIInteractor : MonoBehaviour
     {
         [SerializeField] private Controls _controls;
-        [SerializeField] private List<Dialogue> _dialogues;
-        [SerializeField] private List<Popup> _popups;
         [SerializeField] private Anticlicker _anticlicker;
         [SerializeField] private HUD _hud;
+        [SerializeField] private List<Dialogue> _dialogues;
+        [SerializeField] private List<Popup> _popups;
 
         private Dialogue _currentDialogue;
         private Popup _currentPopup;
+        private EventBus _eventBus;
+
+
+        [Inject]
+        private void Construct(EventBus eventBus)
+        {
+            _eventBus = eventBus;
+        }
+
+        private void Start() => ShowDialogue<StartDialogue>();
 
         public void ShowDialogue<D>() where D : Dialogue
         {
@@ -30,7 +43,7 @@ namespace Scripts.UI
         public void OpenPopup<P>() where P : Popup
         {
             ClosePopup();
-
+            _eventBus.Dispatch(GameEventType.Paused);
             Popup popup = _popups.Find(p => p is P);
             _currentPopup = popup;
             _currentPopup.Open();
