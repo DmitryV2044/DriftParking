@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8977939748748035125}
   - component: {fileID: 6434158992592306633}
   - component: {fileID: 8651554847910603972}
+  - component: {fileID: 8878788308628136405}
+  - component: {fileID: 8227523488257313625}
   m_Layer: 0
   m_Name: view
   m_TagString: Untagged
@@ -83,6 +85,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8878788308628136405
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406700937761215384}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3613567641014311022, guid: 874dd60aa255b4c0d8d7a6b53e5d0d26, type: 3}
+--- !u!114 &8227523488257313625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406700937761215384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369d4ad2213bb4c9eb205942caefc043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6704138265235975213
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,9 +120,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 865022868655036115}
+  - component: {fileID: -4259645498933740371}
+  - component: {fileID: 2718612439939205565}
   m_Layer: 0
   m_Name: Cone
-  m_TagString: Untagged
+  m_TagString: Punchable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,3 +145,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-4259645498933740371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6704138265235975213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d66a79d6b7b74ba28c4701d797ccdc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _forceModifier: 0.4
+--- !u!54 &2718612439939205565
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6704138265235975213}
+  serializedVersion: 2
+  m_Mass: 0.2
+  m_Drag: 0
+  m_AngularDrag: 0.01
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 2

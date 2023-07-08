@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Scripts.CarMotion
 {
-    public class CarMotionControl : MonoBehaviour
+    public class CarMotionController : MonoBehaviour
     {
         [SerializeField, Expandable] CarMotionConfig _config;
 
@@ -17,8 +17,10 @@ namespace Scripts.CarMotion
         [SerializeField, ReadOnly, BoxGroup("Info")] private float _speed;
         [SerializeField, ReadOnly, BoxGroup("Info")] private float _rotationSpeed;
 
-
+        private Rigidbody _rigidbody;
         private TireTrailController _tireTrail;
+
+        public float Speed => _speed;
 
         [Inject]
         private void Construct(InputHandler inputHandler, TireTrailController tireTrail)
@@ -28,6 +30,7 @@ namespace Scripts.CarMotion
             _tireTrail = tireTrail;
             _speed = _config.Speed;
             _rotationSpeed = _config.RotationSpeed;
+            _rigidbody = GetComponent<Rigidbody>();
         }
 
         private void OnEnable()
@@ -36,18 +39,15 @@ namespace Scripts.CarMotion
             _inputHandler.HandbrakeFinished += ReleaseHandbrake;
         }
 
-        private void Update()
+        public void Drive()
         {
-            Drive(_inputHandler.Input);
-        }
-
-        private void Drive(Vector2 direction)
-        {
-
+            Vector2 direction = _inputHandler.Input;
             _moveForce += _speed * Time.deltaTime * transform.forward;
+            // _rigidbody.MovePosition(_rigidbody.position + _moveForce * Time.deltaTime);
             transform.position += _moveForce * Time.deltaTime;
 
             float steerInput = direction.x;
+            // _rigidbody.MoveRotation(_rigidbody.rotation * Quaternion.Euler(_rotationSpeed * _moveForce.magnitude * steerInput * Time.deltaTime * Vector3.up));
             transform.Rotate(_rotationSpeed * _moveForce.magnitude * steerInput * Time.deltaTime * Vector3.up);
 
             _moveForce *= _config.Drag;

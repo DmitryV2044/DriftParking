@@ -1,26 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.General.StateMachine
 {
     public abstract class StateController : MonoBehaviour
     {
-        private State _currentState;
-        private State _initialState;
+        protected List<State> _states;
+        protected State _currentState;
 
-        protected void Start()
-        {
-            ChangeState(_initialState);
-        }
+        protected void Update() => _currentState?.Update();
 
-        protected void Update()
-        {
-            _currentState?.Update();
-        }
-
-        public void ChangeState(State newState)
+        public void ChangeState<S>() where S : State
         {
             _currentState?.Exit();
-            _currentState = newState;
+            _currentState = _states.Find(s => s is S);
             _currentState?.Enter();
         }
     }
