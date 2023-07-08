@@ -3,6 +3,7 @@ using Zenject;
 using Scripts.CarMotion;
 using UnityEngine;
 using Scripts.UI;
+using Scripts.General;
 
 namespace Scripts.CarBehaviour
 {
@@ -12,8 +13,10 @@ namespace Scripts.CarBehaviour
         private CarMotionController _motionController;
         private UIInteractor _uiInteractor;
 
+        private EventBus _eventBus;
+
         [Inject]
-        private void Construct(UIInteractor uiInteractor)
+        private void Construct(UIInteractor uiInteractor, EventBus eventBus)
         {
             _motionController = GetComponent<CarMotionController>();
             _collisionDetector = GetComponent<CollisionDetector>();
@@ -24,11 +27,14 @@ namespace Scripts.CarBehaviour
                 new CrashedState(this, _uiInteractor)
             };
 
+            _eventBus = eventBus;
+
         }
 
         private void OnEnable()
         {
             _collisionDetector.OnCollided += Collide;
+            _eventBus.Subscribe(GameEventType.Restarted, ChangeState<DrivingState>);
         }
 
         private void Start() => ChangeState<DrivingState>();
@@ -52,6 +58,7 @@ namespace Scripts.CarBehaviour
         private void OnDisable()
         {
             _collisionDetector.OnCollided -= Collide;
+            _eventBus.UnSubscribe(GameEventType.Restarted, ChangeState<DrivingState>);
         }
 
     }

@@ -25,6 +25,7 @@ namespace Scripts.UI.Dialogues
         private void HandleRestart()
         {
             _eventBus.Dispatch(GameEventType.Restarted);
+            _interactor.HideDialogue();
         }
 
         private void OnDisable()
