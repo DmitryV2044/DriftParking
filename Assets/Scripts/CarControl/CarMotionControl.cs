@@ -11,10 +11,11 @@ namespace Scripts.CarMotion
         [SerializeField, Expandable] CarMotionConfig _config;
 
         private InputHandler _inputHandler;
-        [SerializeField, ReadOnly, BoxGroup("Info")]private Vector3 _moveForce;
+        [SerializeField, ReadOnly, BoxGroup("Info")] private Vector3 _moveForce;
         [SerializeField, ReadOnly, BoxGroup("Info")] private bool _isHandbraking;
         [SerializeField, ReadOnly, BoxGroup("Info")] private float _currentTraction;
         [SerializeField, ReadOnly, BoxGroup("Info")] private float _speed;
+        [SerializeField, ReadOnly, BoxGroup("Info")] private float _rotationSpeed;
 
 
         private TireTrailController _tireTrail;
@@ -26,6 +27,7 @@ namespace Scripts.CarMotion
             _currentTraction = _config.DefaultTraction;
             _tireTrail = tireTrail;
             _speed = _config.Speed;
+            _rotationSpeed = _config.RotationSpeed;
         }
 
         private void OnEnable()
@@ -46,7 +48,7 @@ namespace Scripts.CarMotion
             transform.position += _moveForce * Time.deltaTime;
 
             float steerInput = direction.x;
-            transform.Rotate(_config.RotationSpeed * _moveForce.magnitude * steerInput * Time.deltaTime * Vector3.up);
+            transform.Rotate(_rotationSpeed * _moveForce.magnitude * steerInput * Time.deltaTime * Vector3.up);
 
             _moveForce *= _config.Drag;
             _moveForce = Vector3.ClampMagnitude(_moveForce, _speed);
@@ -66,12 +68,15 @@ namespace Scripts.CarMotion
             _tireTrail.EnableTrail();
             if (_config.AffectSpeedOnHandbreaking)
                 _speed = _config.SpeedOnHandbraking;
+            if (_config.AffectRotationSpeedOnHandbreaking)
+                _rotationSpeed = _config.RotationSpeedOnHandbraking;
         }
 
         private void ReleaseHandbrake()
         {
             _isHandbraking = false;
             _speed = _config.Speed;
+            _rotationSpeed = _config.RotationSpeed;
             _tireTrail.DisableTrail();
 
         }

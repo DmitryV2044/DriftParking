@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8444e57bbbe1de438ae8a702e19e7cf, type: 3}
   m_Name: CarMotionConfig
   m_EditorClassIdentifier: 
-  <Speed>k__BackingField: 40
+  <Speed>k__BackingField: 30
   <AffectSpeedOnHandbreaking>k__BackingField: 0
   <SpeedOnHandbraking>k__BackingField: 30
-  <RotationSpeed>k__BackingField: 1.42
+  <AffectRotationSpeedOnHandbreaking>k__BackingField: 1
+  <RotationSpeedOnHandbraking>k__BackingField: 4
+  <RotationSpeed>k__BackingField: 2
   <DefaultTraction>k__BackingField: 10
   <StateChangingSmoothness>k__BackingField: 2
   <Drag>k__BackingField: 1

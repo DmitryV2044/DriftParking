@@ -36,7 +36,7 @@ namespace Scripts.InputHandling
             Input = Vector2.right * _controls.Driving.Rotation.ReadValue<float>()
                 + Vector2.up * _controls.Driving.Speed.ReadValue<float>();
 
-            Debug.Log(IsHandbraking);
+            // Debug.Log(IsHandbraking);
             Input.Normalize();
             OnTick?.Invoke(Input);
         }
@@ -44,13 +44,13 @@ namespace Scripts.InputHandling
         private void HandleHandbrake(CallbackContext context)
         {
             IsHandbraking = context.ReadValue<float>() > 0;
-            if(IsHandbraking)
+            if (IsHandbraking)
                 HandbrakeStarted?.Invoke();
             else
                 HandbrakeFinished?.Invoke();
         }
 
-        private void StartTurn(CallbackContext context) 
+        private void StartTurn(CallbackContext context)
         {
             OnTurnBegan?.Invoke();
         }
