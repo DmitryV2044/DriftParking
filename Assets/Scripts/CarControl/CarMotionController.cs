@@ -21,6 +21,7 @@ namespace Scripts.CarMotion
         private TireTrailController _tireTrail;
 
         public float Speed => _speed;
+        public bool IsCrashed = false;
 
         [Inject]
         private void Construct(InputHandler inputHandler, TireTrailController tireTrail)
@@ -41,6 +42,7 @@ namespace Scripts.CarMotion
 
         public void Drive()
         {
+            if (IsCrashed) return;
             Vector2 direction = _inputHandler.Input;
             _moveForce += _speed * Time.deltaTime * transform.forward;
             // _rigidbody.MovePosition(_rigidbody.position + _moveForce * Time.deltaTime);

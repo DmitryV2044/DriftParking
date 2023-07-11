@@ -23,8 +23,9 @@ namespace Scripts.CarBehaviour
             _uiInteractor = uiInteractor;
 
             _states = new(){
+                new IdleState(this),
                 new DrivingState(this, _motionController),
-                new CrashedState(this, _uiInteractor)
+                new CrashedState(this, _uiInteractor, _motionController)
             };
 
             _eventBus = eventBus;
@@ -42,10 +43,10 @@ namespace Scripts.CarBehaviour
 
         private void Collide(Collision collision)
         {
-            Debug.Log("Collided " + collision.transform.GetComponent<Obstacle>());
+            // Debug.Log("Collided " + collision.transform.GetComponent<Obstacle>());
             if (collision.transform.CompareTag("Punchable"))
             {
-                collision.transform.GetComponent<ArcadePuncher>().Punch(collision, _motionController.Speed);
+                collision.transform.GetComponent<ArcadePuncher>()?.Punch(collision, _motionController.Speed);
             }
             else if (collision.transform.GetComponent<Obstacle>() != null)
             {

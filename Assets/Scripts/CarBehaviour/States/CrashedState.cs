@@ -10,14 +10,22 @@ namespace Scripts.CarBehaviour
     {
         private CarMotionController _motionController;
         private UIInteractor _interactor;
-        public CrashedState(StateController controller, UIInteractor interactor) : base(controller)
+        public CrashedState(StateController controller, UIInteractor interactor, CarMotionController carController) : base(controller)
         {
             _interactor = interactor;
+            _motionController = carController;
         }
 
         public override void Enter()
         {
+            _motionController.IsCrashed = true;
             _interactor.ShowDialogue<LoseDialogue>();
+        }
+
+        public override void Exit()
+        {
+            _motionController.IsCrashed = false;
+
         }
     }
 

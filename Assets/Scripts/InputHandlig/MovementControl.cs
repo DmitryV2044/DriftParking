@@ -7,11 +7,9 @@ namespace Scripts.InputHandling
 {
     public class MovementControl : OnScreenControl, IPointerDownHandler, IPointerUpHandler
     {
-
         [SerializeField, InputControl(layout = "Button")] private string _controlPath;
 
         protected override string controlPathInternal { get => _controlPath; set => _controlPath = value; }
-
         public void OnPointerDown(PointerEventData eventData)
         {
             SendValueToControl(1f);
@@ -22,6 +20,11 @@ namespace Scripts.InputHandling
             SendValueToControl(0f);
         }
 
+        protected override void OnDisable()
+        {
+            SentDefaultValueToControl();
+            base.OnDisable();
+        }
 
     }
 

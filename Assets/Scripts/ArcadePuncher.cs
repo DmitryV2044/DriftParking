@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ArcadePuncher : MonoBehaviour, IRestartable
 {
-    [SerializeField, Range(0, 100)] private float _forceModifier = 1f;
+    [SerializeField, Range(0, 2)] private float _forceModifier = 0.2f;
     private Rigidbody _rigidbody;
 
     private void Awake() => _rigidbody = GetComponent<Rigidbody>();
